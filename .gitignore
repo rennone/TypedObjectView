@@ -1,0 +1,41 @@
+# .NET build output
+[Bb]in/
+[Oo]bj/
+artifacts/
+
+# IDE and user-specific settings
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+_ReSharper*/
+*.ReSharper
+
+# Test results and coverage
+TestResults/
+BenchmarkDotNet.Artifacts/
+coverage/
+coverage*.xml
+*.coverage
+*.coveragexml
+*.trx
+
+# NuGet package output
+packages/
+*.nupkg
+*.snupkg
+
+# Local settings and secrets
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+
+# Logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini
