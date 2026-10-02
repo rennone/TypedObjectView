@@ -17,6 +17,16 @@ description: Coordinate non-trivial project work by decomposing scope, ordering 
 
 Assign one owner to each file or component. When overlap is unavoidable, sequence the edits or give one Worker edit ownership and another read-only review ownership.
 
+## Apply the Agent Profiles
+
+- Keep the Manager on `gpt-6-astra` with `high` reasoning when that profile is available.
+- Create at most three Workers, each using `gpt-6-sol` with `medium` reasoning when that profile is available.
+- Only the Manager creates Workers. Explicitly prohibit Workers from creating descendant agents in every delegated task.
+- If the runtime requires a limited or empty history fork to override the Worker model, pass the needed context in the task contract instead of inheriting the entire Manager conversation.
+- If a configured model or reasoning level is unavailable, use the closest profile for the same role and report the substitution to the human.
+
+Use stable labels such as `Worker-1`, `Worker-2`, and `Worker-3` for the life of the task. Record each label's model and role for later commit usage attribution.
+
 ## Delegate with a Task Contract
 
 Every Worker assignment must state:
@@ -64,5 +74,7 @@ Before accepting delegated work:
 - Resolve conflicting assumptions and inconsistent interfaces across Worker results before combining them.
 - For important changes, separate implementation from focused verification. The verifier should seek missed edge cases, regressions, and requirement violations rather than repeat the implementation.
 - Correct small integration issues directly; return substantial or task-local problems to the owning Worker with a narrowed follow-up contract.
+
+After review and verification finish, capture the best available recorded usage for the Manager and each Worker. Include retries under the agent that performed them, and preserve `input`, `cached input`, `output`, `reasoning`, and `total` as separate fields. Mark missing data as unknown rather than zero. Hand this usage record to the `implement` Skill for the task commit; do not ask Workers to guess or self-report token counts.
 
 Report the integrated outcome to the human in terms of the result, important design decisions, major changes, verification, and remaining issues. Keep internal coordination details out unless they explain a decision or risk.

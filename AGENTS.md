@@ -4,6 +4,13 @@
 
 This project uses one **Manager Agent** and, when useful, **0–3 Worker Agents**.
 
+The default execution profiles are:
+
+- **Manager** — `gpt-6-astra` with `high` reasoning.
+- **Workers** — `gpt-6-sol` with `medium` reasoning.
+
+Use these profiles when the runtime exposes them. If a configured profile is unavailable, use the closest available profile for the same role and disclose the substitution to the human. Only the Manager may create Workers; Workers must not create descendant agents. This keeps the team within the three-Worker limit and makes responsibility and usage attribution unambiguous.
+
 Authority is hierarchical:
 
 1. **Human** — owns requirements, product direction, scope, and significant decisions.
@@ -104,7 +111,36 @@ Use all Skills that materially apply. Do not duplicate their detailed procedures
 - Prefer independent verification for important or high-risk changes when practical.
 - Do not expand scope merely to improve adjacent code.
 
-## 8. Final reporting
+## 8. Task commits
+
+For repository-changing work, one human task is one commit unless the human explicitly requests a different split.
+
+- A branch per task is not required. Run separate human tasks sequentially in one checkout.
+- Use a branch or worktree when separate human tasks must proceed concurrently or require isolation.
+- Workers must not stage or commit changes. The Manager alone reviews, stages, and commits the integrated result.
+- The Manager must stage only task-owned files or hunks and must preserve unrelated pre-existing changes.
+- Verification fixes discovered before task completion remain in the same task commit.
+- A follow-up requirement received after completion is a new task and a new commit.
+- Do not create an empty commit for a task that makes no repository change.
+- Unless the human explicitly asks not to commit, completing repository-changing work includes creating the task commit.
+- The final report must include the commit hash and the exact commit message.
+
+Detailed staging, message, and usage procedures belong in the `implement` Skill.
+
+## 9. AI usage accounting
+
+Each task commit must include machine-readable trailers that identify the participating agents, their models and roles, and the best available token usage and estimated cost.
+
+- Prefer recorded runtime or trace usage. Never invent or estimate token counts that the runtime does not expose.
+- Record usage separately for the Manager and every Worker. Include retries in the agent that performed them.
+- Treat cached input tokens as part of input tokens and reasoning tokens as part of output tokens; do not count either category twice.
+- State whether the data is `measured`, `partial`, or `unavailable`. Missing usage means unknown, not zero.
+- Monetary cost is an estimate only. Record the pricing date and model-specific rates used; do not present subscription usage as a per-task billed amount.
+- Use the completion of review and verification as the accounting cutoff. Exclude commit execution and post-commit reporting so the measurement boundary is reproducible.
+
+When the runtime reports usage only after an agent turn ends, prefer an external wrapper that collects the completed trace and creates the commit. If that is unavailable, record the latest exposed usage with `partial` status or use `unavailable`; do not fabricate completeness.
+
+## 10. Final reporting
 
 After non-trivial work, the Manager's final report must include:
 

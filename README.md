@@ -65,5 +65,6 @@ IObjectView<MyData> asyncDatabase = await ObjectView.FromJsonColumnAsync<MyData>
 
 ```text
 dotnet build TypedObjectView.sln
-dotnet run --project tests/TypedObjectView.Tests/TypedObjectView.Tests.csproj
+dotnet run --project tests/TypedObjectView.Tests/TypedObjectView.Tests.csproj --framework net9.0 --no-build
+dotnet run --project tests/TypedObjectView.Tests/TypedObjectView.Tests.csproj --framework net9.0-windows --no-build
 ```
